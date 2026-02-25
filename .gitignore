@@ -1,0 +1,19 @@
+# System Files
+.DS_Store
+Thumbs.db
+*.tmp
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.bak
+
+# Brain / Antigravity data (if any)
+.gemini/
+.system_generated/
+task.md
+implementation_plan.md
+walkthrough.md
+*.png
+*.webp

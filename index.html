@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Além do AI Mentor: Auditoria Profunda de Segurança via Source Code Export</title>
+    <meta name="description"
+        content="Apresentação interativa sobre auditoria de segurança em aplicações OutSystems via exportação de código-fonte e ferramentas SAST.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>tailwind.config = { theme: { extend: { colors: { neon: '#00FFFF', matrix: '#00FF00', darkbg: '#1E1E1E' }, fontFamily: { mono: ['JetBrains Mono', 'Fira Code', 'monospace'], sans: ['Inter', 'sans-serif'] } } } }</script>
+    <!-- AOS -->
+    <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+    <!-- Prism.js -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
+    <!-- Custom CSS -->
+    <link href="assets/css/styles.css" rel="stylesheet">
+</head>
+
+<body class="bg-black text-gray-200 font-sans">
+
+    <!-- ========== NAVIGATION ========== -->
+    <nav class="nav-fixed" role="navigation" aria-label="Menu principal">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+            <a href="#hero" class="font-mono text-neon font-bold text-sm tracking-wider glow-blue">
+                <svg class="inline w-5 h-5 mr-1 -mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+                SecAudit//OS
+            </a>
+            <!-- Desktop Nav -->
+            <div class="hidden md:flex items-center gap-1">
+                <a href="#introducao" class="nav-link">Introdução</a>
+                <a href="#pipeline" class="nav-link">Pipeline</a>
+                <a href="#sast" class="nav-link">SAST</a>
+                <a href="#casos" class="nav-link">Hands-on</a>
+                <a href="#securitygate" class="nav-link">CI/CD</a>
+                <a href="#terminal" class="nav-link">Terminal</a>
+            </div>
+            <!-- Mobile Toggle -->
+            <button id="menu-toggle" class="md:hidden text-neon p-2" aria-label="Abrir menu" aria-expanded="false">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden px-4 pb-4 space-y-2">
+            <a href="#introducao" class="nav-link block">Introdução</a>
+            <a href="#pipeline" class="nav-link block">Pipeline</a>
+            <a href="#sast" class="nav-link block">SAST</a>
+            <a href="#casos" class="nav-link block">Hands-on</a>
+            <a href="#securitygate" class="nav-link block">CI/CD</a>
+            <a href="#terminal" class="nav-link block">Terminal</a>
+        </div>
+    </nav>
+
+    <!-- ========== HERO ========== -->
+    <section id="hero" class="hero-bg pt-20">
+        <div class="max-w-5xl mx-auto px-4 py-20 text-center relative z-10">
+            <div data-aos="fade-up">
+                <span class="badge badge-blue mb-6 inline-block">OutSystems User Group 2025</span>
+                <h1 class="text-3xl md:text-5xl lg:text-6xl font-mono font-bold mb-6 leading-tight">
+                    <span class="text-neon glow-blue">Além do AI Mentor:</span><br>
+                    <span class="text-white">Auditoria Profunda de Segurança</span><br>
+                    <span class="text-matrix glow-green">via Source Code Export</span>
+                    <span class="typing-cursor"></span>
+                </h1>
+                <p class="text-gray-400 text-lg md:text-xl max-w-3xl mx-auto mb-10 font-sans leading-relaxed">
+                    Como usar a <strong class="text-neon">LifeTime API v2</strong> para exportar código-fonte, executar
+                    <strong class="text-matrix">SAST profundo</strong> e implantar um Security Gate no seu pipeline
+                    CI/CD.
+                </p>
+                <div class="flex flex-wrap gap-4 justify-center">
+                    <a href="#introducao" class="gradient-btn">Iniciar Apresentação</a>
+                    <a href="#terminal" class="reveal-btn">Experimentar Terminal →</a>
+                </div>
+            </div>
+            <div data-aos="fade-up" data-aos-delay="300"
+                class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto">
+                <div class="stat-card">
+                    <div class="stat-number">85%</div>
+                    <p class="text-xs text-gray-500 mt-1 font-mono">Falsos Negativos AI Mentor</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">5+</div>
+                    <p class="text-xs text-gray-500 mt-1 font-mono">Ferramentas SAST</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">10</div>
+                    <p class="text-xs text-gray-500 mt-1 font-mono">OWASP Top 10</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">0</div>
+                    <p class="text-xs text-gray-500 mt-1 font-mono">Deploy sem Gate</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider my-0"></div>
+
+    <!-- ========== INTRODUÇÃO ========== -->
+    <section id="introducao" class="py-20 md:py-28">
+        <div class="max-w-5xl mx-auto px-4">
+            <div data-aos="fade-up" class="text-center mb-12">
+                <span class="badge badge-blue mb-4 inline-block">Seção 01</span>
+                <h2 class="text-2xl md:text-4xl font-mono font-bold text-neon glow-blue mb-4">O Problema</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">Por que o AI Mentor sozinho não é suficiente para garantir
+                    conformidade com LGPD, GDPR e PCI-DSS.</p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div data-aos="fade-right" class="section-card">
+                    <h3 class="text-lg font-mono text-matrix glow-green mb-4 flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                        </svg>
+                        Limitações do AI Mentor
+                    </h3>
+                    <ul class="space-y-3 text-sm text-gray-300">
+                        <li class="flex items-start gap-2"><span class="text-red-400 mt-0.5">✗</span> Não analisa código
+                            C# de extensões do Integration Studio</li>
+                        <li class="flex items-start gap-2"><span class="text-red-400 mt-0.5">✗</span> Detecta apenas
+                            padrões visuais — ignora lógica de back-end</li>
+                        <li class="flex items-start gap-2"><span class="text-red-400 mt-0.5">✗</span> Sem cobertura para
+                            hardcoded secrets em extensões .xif</li>
+                        <li class="flex items-start gap-2"><span class="text-red-400 mt-0.5">✗</span> Taint analysis
+                            limitada a input flow em Server Actions</li>
+                        <li class="flex items-start gap-2"><span class="text-red-400 mt-0.5">✗</span> Sem mapeamento
+                            para OWASP Top 10 completo</li>
+                        <li class="flex items-start gap-2"><span class="text-red-400 mt-0.5">✗</span> Falsos
+                            positivos/negativos sem mecanismo de feedback granular</li>
+                    </ul>
+                </div>
+                <div data-aos="fade-left" class="section-card">
+                    <h3 class="text-lg font-mono text-neon glow-blue mb-4 flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                        </svg>
+                        O que regulamentações exigem
+                    </h3>
+                    <div class="space-y-4">
+                        <div class="p-3 rounded-lg bg-black/50 border border-blue-900/30">
+                            <span class="badge badge-blue text-xs mb-2 inline-block">LGPD</span>
+                            <p class="text-sm text-gray-300">Art. 46 — Medidas técnicas para proteção de dados pessoais,
+                                incluindo análise de código.</p>
+                        </div>
+                        <div class="p-3 rounded-lg bg-black/50 border border-blue-900/30">
+                            <span class="badge badge-green text-xs mb-2 inline-block">GDPR</span>
+                            <p class="text-sm text-gray-300">Art. 25 — Privacy by Design, com obrigação de DPIA e
+                                revisão técnica periódica.</p>
+                        </div>
+                        <div class="p-3 rounded-lg bg-black/50 border border-blue-900/30">
+                            <span class="badge badge-yellow text-xs mb-2 inline-block">PCI-DSS</span>
+                            <p class="text-sm text-gray-300">Req. 6.3.2 — Revisão de código antes de produção para
+                                identificar vulnerabilidades.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ========== PIPELINE DE EXTRAÇÃO ========== -->
+    <section id="pipeline" class="py-20 md:py-28 bg-gradient-to-b from-black to-[#050510]">
+        <div class="max-w-5xl mx-auto px-4">
+            <div data-aos="fade-up" class="text-center mb-12">
+                <span class="badge badge-green mb-4 inline-block">Seção 02</span>
+                <h2 class="text-2xl md:text-4xl font-mono font-bold text-matrix glow-green mb-4">Pipeline de Extração
+                </h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">Como consumir a LifeTime API v2 para exportar o código-fonte
+                    gerado pela plataforma OutSystems.</p>
+            </div>
+
+            <div data-aos="fade-up" class="section-card mb-8">
+                <h3 class="text-lg font-mono text-neon mb-2">Pré-requisitos</h3>
+                <div class="grid md:grid-cols-3 gap-3 text-sm">
+                    <div class="p-3 rounded-lg bg-black/50 border border-cyan-900/30">
+                        <span class="text-neon font-mono font-bold">Platform Server</span>
+                        <p class="text-gray-400 mt-1">≥ 11.28.0</p>
+                    </div>
+                    <div class="p-3 rounded-lg bg-black/50 border border-cyan-900/30">
+                        <span class="text-neon font-mono font-bold">LifeTime</span>
+                        <p class="text-gray-400 mt-1">≥ 11.22.0</p>
+                    </div>
+                    <div class="p-3 rounded-lg bg-black/50 border border-cyan-900/30">
+                        <span class="text-neon font-mono font-bold">Permissão</span>
+                        <p class="text-gray-400 mt-1">Open and Debug</p>
+                    </div>
+                </div>
+            </div>
+
+            <div data-aos="fade-up" class="accordion-group space-y-2">
+                <!-- Step 1 -->
+                <div class="accordion-item">
+                    <button class="accordion-trigger" aria-expanded="false" aria-controls="step1-content">
+                        <span><span class="text-matrix mr-2">01</span> Obter a Environment Key</span>
+                        <svg class="accordion-icon w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                    <div id="step1-content" class="accordion-content" role="region">
+                        <p class="text-sm text-gray-300 mb-3">Use o endpoint para listar os ambientes disponíveis e
+                            obter a key do ambiente de produção:</p>
+                        <pre><code class="language-bash">GET https://{lifetime-domain}/lifetimeapi/rest/v2/environments/
+Authorization: Bearer {service-account-token}</code></pre>
+                        <pre><code class="language-json">{
+  "Key": "f7e2a3b1-4c5d-6e7f-8a9b-0c1d2e3f4a5b",
+  "Name": "Production",
+  "OSVersion": "11.28.0",
+  "HostName": "prod.example.com"
+}</code></pre>
+                    </div>
+                </div>
+                <!-- Step 2 -->
+                <div class="accordion-item">
+                    <button class="accordion-trigger" aria-expanded="false" aria-controls="step2-content">
+                        <span><span class="text-matrix mr-2">02</span> Obter a Application Key</span>
+                        <svg class="accordion-icon w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                    <div id="step2-content" class="accordion-content" role="region">
+                        <p class="text-sm text-gray-300 mb-3">Liste as aplicações e obtenha a key daquela que deseja
+                            analisar:</p>
+                        <pre><code class="language-bash">GET https://{lifetime-domain}/lifetimeapi/rest/v2/applications/
+Authorization: Bearer {service-account-token}</code></pre>
+                    </div>
+                </div>
+                <!-- Step 3 -->
+                <div class="accordion-item">
+                    <button class="accordion-trigger" aria-expanded="false" aria-controls="step3-content">
+                        <span><span class="text-matrix mr-2">03</span> Solicitar Export do Source Code</span>
+                        <svg class="accordion-icon w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                    <div id="step3-content" class="accordion-content" role="region">
+                        <p class="text-sm text-gray-300 mb-3">Inicie a geração do pacote de código-fonte:</p>
+                        <pre><code class="language-bash">POST https://{lifetime-domain}/lifetimeapi/rest/v2/environments/{envKey}/applications/{appKey}/sourcecode
+Authorization: Bearer {service-account-token}
+Content-Type: application/json
+
+{
+  "TargetEnvironmentKey": "{envKey}"
+}</code></pre>
+                        <p class="text-sm text-gray-400 mt-3">⚠️ O pacote tem limite de <strong class="text-neon">150
+                                MB</strong>. Para apps maiores, exporte por módulo.</p>
+                    </div>
+                </div>
+                <!-- Step 4 -->
+                <div class="accordion-item">
+                    <button class="accordion-trigger" aria-expanded="false" aria-controls="step4-content">
+                        <span><span class="text-matrix mr-2">04</span> Verificar Status e Download</span>
+                        <svg class="accordion-icon w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                    <div id="step4-content" class="accordion-content" role="region">
+                        <p class="text-sm text-gray-300 mb-3">Verifique o status do packaging e, quando pronto, baixe o
+                            pacote:</p>
+                        <pre><code class="language-bash"># Verificar status
+GET /lifetimeapi/rest/v2/environments/{envKey}/applications/{appKey}/sourcecode/status
+
+# Obter link de download
+GET /lifetimeapi/rest/v2/environments/{envKey}/applications/{appKey}/sourcecode/link
+
+# Download do pacote (.zip com C#/.NET e código nativo mobile)
+GET {downloadLink}</code></pre>
+                        <p class="text-sm text-gray-400 mt-3">O pacote contém: <span class="text-neon">Server-side
+                                C#/.NET</span>, e para mobile, <span class="text-matrix">código nativo
+                                Java/Swift</span>.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ========== FERRAMENTAS SAST ========== -->
+    <section id="sast" class="py-20 md:py-28">
+        <div class="max-w-5xl mx-auto px-4">
+            <div data-aos="fade-up" class="text-center mb-12">
+                <span class="badge badge-blue mb-4 inline-block">Seção 03</span>
+                <h2 class="text-2xl md:text-4xl font-mono font-bold text-neon glow-blue mb-4">Ferramentas SAST</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">Comparativo técnico de ferramentas de análise estática para
+                    código exportado do OutSystems.</p>
+            </div>
+            <div data-aos="fade-up" class="overflow-x-auto mb-10 section-card p-0">
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Critério</th>
+                            <th><span class="text-neon">SonarQube</span></th>
+                            <th><span class="text-matrix">Checkmarx</span></th>
+                            <th><span class="text-yellow-400">Veracode</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="font-mono text-xs text-neon">Foco</td>
+                            <td>Code Quality + Segurança</td>
+                            <td>Segurança profunda (SAST puro)</td>
+                            <td>Plataforma AST completa</td>
+                        </tr>
+                        <tr>
+                            <td class="font-mono text-xs text-neon">Linguagens</td>
+                            <td>30+ (C#, Java, JS...)</td>
+                            <td>35+ linguagens, 80 frameworks</td>
+                            <td>100+ linguagens e frameworks</td>
+                        </tr>
+                        <tr>
+                            <td class="font-mono text-xs text-neon">OutSystems</td>
+                            <td>Analisa código 3GL exportado</td>
+                            <td>Scan de código não compilado</td>
+                            <td>Integração documentada com OS</td>
+                        </tr>
+                        <tr>
+                            <td class="font-mono text-xs text-neon">Taint Analysis</td>
+                            <td>Data flow em 1st/3rd party</td>
+                            <td>Profundo (lógica de negócio)</td>
+                            <td>Source + compiled scan</td>
+                        </tr>
+                        <tr>
+                            <td class="font-mono text-xs text-neon">False Positives</td>
+                            <td>Médio (~5-10%)</td>
+                            <td>Médio-alto (mais "noisy")</td>
+                            <td>Baixo (&lt; 1.1%)</td>
+                        </tr>
+                        <tr>
+                            <td class="font-mono text-xs text-neon">CI/CD</td>
+                            <td><span class="text-matrix">✓</span> Azure DevOps, Jenkins</td>
+                            <td><span class="text-matrix">✓</span> CI/CD nativo, IDE plugins</td>
+                            <td><span class="text-matrix">✓</span> Pipeline API, GH Actions</td>
+                        </tr>
+                        <tr>
+                            <td class="font-mono text-xs text-neon">Custo</td>
+                            <td><span class="badge badge-green text-xs">Community Free</span></td>
+                            <td><span class="badge badge-yellow text-xs">Enterprise $$</span></td>
+                            <td><span class="badge badge-yellow text-xs">Enterprise $$</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div data-aos="fade-up" class="section-card">
+                <h3 class="text-lg font-mono text-matrix glow-green mb-4">OWASP Top 10 → Service Studio</h3>
+                <div class="grid md:grid-cols-2 gap-4 text-sm">
+                    <div class="p-4 rounded-lg bg-black/50 border border-red-900/30">
+                        <span class="badge badge-red text-xs mb-2 inline-block">A03: Injection</span>
+                        <p class="text-gray-300"><strong class="text-neon">Código:</strong> SQL Injection em <code
+                                class="text-matrix">DataAccess.cs</code></p>
+                        <p class="text-gray-400 mt-1"><strong class="text-neon">Service Studio:</strong> Advanced Query
+                            → <code class="text-matrix">GetUserById</code></p>
+                    </div>
+                    <div class="p-4 rounded-lg bg-black/50 border border-red-900/30">
+                        <span class="badge badge-red text-xs mb-2 inline-block">A02: Crypto Failures</span>
+                        <p class="text-gray-300"><strong class="text-neon">Código:</strong> Hardcoded key em <code
+                                class="text-matrix">CryptoHelper.cs</code></p>
+                        <p class="text-gray-400 mt-1"><strong class="text-neon">Service Studio:</strong> Extension <code
+                                class="text-matrix">SecurityUtils.xif</code></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ========== CASOS REAIS ========== -->
+    <section id="casos" class="py-20 md:py-28 bg-gradient-to-b from-black to-[#050510]">
+        <div class="max-w-5xl mx-auto px-4">
+            <div data-aos="fade-up" class="text-center mb-12">
+                <span class="badge badge-green mb-4 inline-block">Seção 04</span>
+                <h2 class="text-2xl md:text-4xl font-mono font-bold text-matrix glow-green mb-4">Casos Reais — Hands-on
+                </h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">Exemplos práticos de vulnerabilidades em extensões C# do
+                    OutSystems com código antes/depois.</p>
+            </div>
+
+            <!-- Exemplo 1: Hardcoded Secrets -->
+            <div data-aos="fade-up" class="section-card mb-8">
+                <div class="flex items-center gap-2 mb-4">
+                    <span class="badge badge-red">CRITICAL</span>
+                    <h3 class="text-lg font-mono text-neon">Exemplo 1: Hardcoded Secrets em Extension C#</h3>
+                </div>
+                <p class="text-sm text-gray-400 mb-4">O AI Mentor não analisa o código C# dentro de extensões .xif do
+                    Integration Studio. Secrets hardcoded passam despercebidos.</p>
+
+                <h4 class="font-mono text-sm text-red-400 mb-2">❌ Código Vulnerável:</h4>
+                <pre><code class="language-csharp">// Extension: PaymentGateway.xif - PaymentService.cs
+public class PaymentService
+{
+    // CWE-798: Hardcoded Credentials
+    private const string API_KEY = "sk_live_4eC39HqLyjWDarjtT1zdp7dc";
+    private const string DB_PASSWORD = "Pr0d@Passw0rd!2024";
+    private const string JWT_SECRET = "mySuperSecretKey123!@#";
+
+    public string ProcessPayment(decimal amount)
+    {
+        var client = new HttpClient();
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {API_KEY}");
+        // ...
+    }
+}</code></pre>
+
+                <h4 class="font-mono text-sm text-neon mb-2 mt-4">🔍 Regex para detecção (SonarQube Custom Rule):</h4>
+                <pre><code class="language-csharp">// Padrões regex para detectar secrets hardcoded em C#
+string[] patterns = new[]
+{
+    @"(?i)(api[_-]?key|apikey)\s*=\s*[""'][A-Za-z0-9_\-]{20,}[""']",
+    @"(?i)(password|passwd|pwd)\s*=\s*[""'][^""']{8,}[""']",
+    @"(?i)(secret|token|jwt)\s*=\s*[""'][^""']{10,}[""']",
+    @"AKIA[0-9A-Z]{16}",              // AWS Access Key
+    @"sk_(live|test)_[0-9a-zA-Z]{24}", // Stripe API Key
+    @"(?i)connectionstring.*password\s*=\s*[^;]+"
+};</code></pre>
+
+                <button class="reveal-btn mt-4" data-target="solution-1" aria-expanded="false">[ Revelar Solução
+                    ]</button>
+                <div id="solution-1" class="hidden mt-4">
+                    <h4 class="font-mono text-sm text-matrix mb-2">✅ Código Corrigido:</h4>
+                    <pre><code class="language-csharp">using Azure.Identity;
+using Azure.Security.KeyVault.Secrets;
+
+public class PaymentService
+{
+    private readonly SecretClient _secretClient;
+
+    public PaymentService()
+    {
+        // Usa Azure Key Vault via Managed Identity
+        _secretClient = new SecretClient(
+            new Uri("https://myapp-vault.vault.azure.net/"),
+            new DefaultAzureCredential());
+    }
+
+    public string ProcessPayment(decimal amount)
+    {
+        // Secret carregado em runtime, nunca hardcoded
+        var apiKey = _secretClient.GetSecret("PaymentGateway-ApiKey").Value.Value;
+        var client = new HttpClient();
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {apiKey}");
+        // ...
+    }
+}</code></pre>
+                </div>
+            </div>
+
+            <!-- Exemplo 2: XPath Injection -->
+            <div data-aos="fade-up" class="section-card">
+                <div class="flex items-center gap-2 mb-4">
+                    <span class="badge badge-yellow">HIGH</span>
+                    <h3 class="text-lg font-mono text-neon">Exemplo 2: XPath Injection em Extension C#</h3>
+                </div>
+                <p class="text-sm text-gray-400 mb-4">Componente customizado C# que processa XML sem sanitizar input do
+                    usuário — vulnerável a XPath Injection (CWE-643).</p>
+
+                <h4 class="font-mono text-sm text-red-400 mb-2">❌ Código Vulnerável:</h4>
+                <pre><code class="language-csharp">// Extension: XMLProcessor.xif - UserLookup.cs
+public string GetUserData(string username, string password)
+{
+    XmlDocument doc = new XmlDocument();
+    doc.Load("users.xml");
+
+    // VULNERÁVEL: Input concatenado diretamente no XPath
+    string xpath = $"//users/user[username='{username}' and password='{password}']";
+    XmlNode node = doc.SelectSingleNode(xpath);
+
+    // Ataque: username = "' or '1'='1" → bypass de autenticação
+    return node?.InnerText ?? "User not found";
+}</code></pre>
+
+                <button class="reveal-btn mt-4" data-target="solution-2" aria-expanded="false">[ Revelar Solução
+                    ]</button>
+                <div id="solution-2" class="hidden mt-4">
+                    <h4 class="font-mono text-sm text-matrix mb-2">✅ Código Corrigido (parametrização):</h4>
+                    <pre><code class="language-csharp">public string GetUserData(string username, string password)
+{
+    XmlDocument doc = new XmlDocument();
+    doc.Load("users.xml");
+
+    // SEGURO: Usa XPathNavigator com variáveis compiladas
+    XPathNavigator nav = doc.CreateNavigator();
+    XPathExpression expr = nav.Compile("//users/user[username=$user and password=$pass]");
+
+    // Contexto com variáveis parametrizadas
+    CustomXsltContext ctx = new CustomXsltContext();
+    ctx.AddVariable("user", username);
+    ctx.AddVariable("pass", password);
+    expr.SetContext(ctx);
+
+    XPathNodeIterator iterator = nav.Select(expr);
+    return iterator.MoveNext() ? iterator.Current.Value : "User not found";
+}</code></pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ========== SECURITY GATE CI/CD ========== -->
+    <section id="securitygate" class="py-20 md:py-28">
+        <div class="max-w-5xl mx-auto px-4">
+            <div data-aos="fade-up" class="text-center mb-12">
+                <span class="badge badge-blue mb-4 inline-block">Seção 05</span>
+                <h2 class="text-2xl md:text-4xl font-mono font-bold text-neon glow-blue mb-4">Security Gate CI/CD</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">Checklist interativo para implantar um gate de segurança no
+                    pipeline. Progresso salvo automaticamente.</p>
+            </div>
+            <div data-aos="fade-up" class="section-card">
+                <div class="flex items-center justify-between mb-6 flex-wrap gap-3">
+                    <h3 class="text-lg font-mono text-matrix glow-green">Checklist de Implantação</h3>
+                    <span id="progress-badge" class="badge badge-red">🔴 PENDENTE</span>
+                </div>
+                <div class="mb-6">
+                    <div class="flex justify-between text-xs font-mono text-gray-500 mb-2">
+                        <span>Progresso</span>
+                        <span id="progress-text">0/8 concluídos (0%)</span>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div id="progress-fill" class="progress-bar-fill" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div id="checklist-container" role="list" aria-label="Checklist de segurança CI/CD"></div>
+            </div>
+            <div data-aos="fade-up" class="section-card mt-8">
+                <h3 class="font-mono text-neon text-sm mb-3">Exemplo: GitHub Actions Workflow</h3>
+                <pre><code class="language-yaml">name: OutSystems Security Gate
+on:
+  schedule:
+    - cron: '0 6 * * 1'  # Weekly scan
+  workflow_dispatch:
+jobs:
+  security-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Export Source Code via LifeTime API
+        run: |
+          curl -X POST "${{ secrets.LIFETIME_URL }}/sourcecode" \
+            -H "Authorization: Bearer ${{ secrets.LT_TOKEN }}"
+      - name: Run SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v2
+        with:
+          args: -Dsonar.qualitygate.wait=true
+      - name: Check Quality Gate
+        run: |
+          STATUS=$(curl -s "$SONAR_URL/api/qualitygates/project_status" | jq -r '.projectStatus.status')
+          if [ "$STATUS" != "OK" ]; then exit 1; fi</code></pre>
+            </div>
+        </div>
+    </section>
+    <div class="section-divider"></div>
+    <!-- ========== TERMINAL SIMULADOR ========== -->
+    <section id="terminal" class="py-20 md:py-28 bg-gradient-to-b from-black to-[#050510]">
+        <div class="max-w-4xl mx-auto px-4">
+            <div data-aos="fade-up" class="text-center mb-12">
+                <span class="badge badge-green mb-4 inline-block">Interativo</span>
+                <h2 class="text-2xl md:text-4xl font-mono font-bold text-matrix glow-green mb-4">Terminal de Segurança
+                </h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">Simule um scan de segurança em tempo real. Digite comandos e
+                    veja os resultados. Use <kbd
+                        class="px-2 py-0.5 bg-gray-800 rounded text-neon text-xs font-mono">help</kbd> para começar.</p>
+            </div>
+            <div data-aos="fade-up" class="mb-4 flex items-center justify-between">
+                <span class="font-mono text-sm text-gray-500">Risk Score:</span>
+                <span id="terminal-score"></span>
+            </div>
+            <div data-aos="fade-up" class="terminal-container">
+                <div class="terminal-header">
+                    <span class="terminal-dot red"></span>
+                    <span class="terminal-dot yellow"></span>
+                    <span class="terminal-dot green"></span>
+                    <span class="font-mono text-xs text-gray-500 ml-2">security@audit:~</span>
+                </div>
+                <div id="terminal-body" class="terminal-body" role="log" aria-label="Terminal output"
+                    aria-live="polite">
+                    <div class="terminal-output"><span class="info">╔══════════════════════════════════════════╗
+                            ║ OutSystems Security Audit Terminal v2.0 ║
+                            ║ Type "help" for available commands ║
+                            ╚══════════════════════════════════════════╝</span></div>
+                    <div class="terminal-input-line">
+                        <span class="terminal-prompt">security@audit:~$</span>
+                        <input type="text" id="terminal-input" class="terminal-input" autocomplete="off"
+                            spellcheck="false" aria-label="Entrada de comando do terminal"
+                            placeholder="Digite um comando...">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="section-divider"></div>
+    <!-- ========== FOOTER ========== -->
+    <footer class="py-12 border-t border-gray-900">
+        <div class="max-w-5xl mx-auto px-4 text-center">
+            <div class="flex items-center justify-center gap-2 mb-4">
+                <svg class="w-5 h-5 text-neon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+                <span class="font-mono text-neon font-bold text-sm">SecAudit//OS</span>
+            </div>
+            <p class="text-gray-500 text-sm mb-2">Além do AI Mentor: Auditoria Profunda de Segurança via Source Code
+                Export</p>
+            <p class="text-gray-600 text-xs mb-4">OutSystems User Group — 2025</p>
+            <a href="https://github.com" target="_blank" rel="noopener noreferrer"
+                class="text-gray-500 hover:text-neon transition-colors text-sm font-mono inline-flex items-center gap-1">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path
+                        d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
+                </svg>
+                Repositório
+            </a>
+            <p class="text-gray-700 text-xs mt-6">Construído com Tailwind CSS, Prism.js, AOS</p>
+        </div>
+    </footer>
+    <!-- Back to Top -->
+    <button id="back-to-top" class="back-to-top" aria-label="Voltar ao topo">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+        </svg>
+    </button>
+    <!-- Scripts -->
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/terminal.js"></script>
+    <script src="assets/js/checklist.js"></script>
+</body>
+
+</html>
