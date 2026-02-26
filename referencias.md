@@ -63,3 +63,118 @@ Um estudo aponta que LLMs melhoram a análise de segurança quando usados junto 
 12. IA tende a “entender” intenção, não rastrear fluxos complexos
 AI-code-review é excelente para analisar contexto, mas pior em seguir longos fluxos de execução, dependências entre módulos e multi-hop taint analysis (fundamental para LGPD/GDPR).
 Estudos mostram que IA enxerga padrões, mas não substitui análise de rastreamento rigorosa. [glue.tools]
+
+
+Sonar Qube
+
+https://sonarcloud.io/component_measures?metric=new_security_rating&view=list&id=lsantosnet-dot_SAP-PI-Manager
+
+
+Checkmarx
+
+https://docs.checkmarx.com/en/34965-46311-checkmarx-sast-overview.html
+
+🛡️ O que é a Checkmarx?
+A Checkmarx é uma das plataformas de Application Security Testing (AppSec) mais reconhecidas mundialmente, voltada para ajudar empresas a identificar e corrigir vulnerabilidades desde a primeira linha de código até o deploy. Ela é referência especialmente por seu motor de SAST (Static Application Security Testing), mas evoluiu para um ecossistema muito mais completo.
+
+⚙️ Principais funcionalidades da Checkmarx (com fontes)
+1. SAST — Static Application Security Testing
+A Checkmarx SAST analisa o código-fonte sem necessidade de compilação, construindo um grafo lógico e encontrando vulnerabilidades, problemas de lógica, falhas de compliance e muito mais.
+Ela usa centenas de queries pré-configuradas, e permite criar novas através do SAST Auditor. [docs.checkmarx.com]
+
+2. Suporte amplo a linguagens e frameworks
+A plataforma suporta mais de 25 linguagens e frameworks, sendo aplicável a praticamente qualquer stack corporativa moderna. [stackinsight.net]
+
+3. Integração completa com o ciclo de desenvolvimento
+Integra com:
+
+GitHub
+Azure DevOps
+Jenkins
+Bamboo
+SonarQube
+IDEs (VS Code, Eclipse, Visual Studio, IntelliJ) [docs.checkmarx.com]
+
+Permite gatilhos automáticos por CI/CD ou análise sob demanda.
+
+4. SCA — Software Composition Analysis
+Além de SAST, a Checkmarx inclui OSA/SCA para detecção de:
+
+Vulnerabilidades em dependências open-source
+Riscos de licenciamento
+Malicious packages
+ [docs.checkmarx.com], [checkmarx.com]
+
+
+5. Checkmarx One — Plataforma unificada AppSec
+A Checkmarx evoluiu para o Checkmarx One, que agrega:
+
+SAST
+SCA
+IaC scanning
+API security
+DAST
+Container & supply chain security
+ASPM (Application Security Posture Management) [gartner.com]
+
+É uma plataforma cloud-native que busca ser a solução única de AppSec para grandes empresas.
+
+6. Agentes de IA (Agentic AppSec)
+A empresa está investindo pesado em IA para acelerar correções e dar contexto ao desenvolvedor.
+Exemplos:
+
+Checkmarx One Developer Assist (IA no IDE para prevenir e corrigir código inseguro)
+Agentes inteligentes que correlacionam riscos e reduzem ruído (menos falsos positivos)
+ [checkmarx.com], [secure.bus...sswire.com]
+
+
+7. Reconhecimento do mercado
+A Checkmarx é Líder no Forrester Wave™ SAST Q3 2025, com o maior score de todos os fornecedores avaliados.
+A avaliação destaca:
+
+investimento forte em IA
+visão focada em segurança para o futuro
+melhor oferta atual na categoria
+ [malware.news], [checkmarx.com]
+
+
+8. Experiência de clientes
+
+Destaques positivos incluem alta precisão, baixa taxa de falsos positivos, boa integração e melhor visibilidade de riscos.
+Alguns apontam limitações de suporte técnico e interface.
+ [gartner.com], [gartner.com]
+
+
+🧩 Como a Checkmarx funciona
+✔️ SAST baseado em grafos lógicos
+A ferramenta constrói um grafo de fluxo interno do código, permitindo detectar vulnerabilidades complexas sem precisar compilar. [docs.checkmarx.com]
+✔️ Queries parametrizadas e personalizáveis
+Usuários podem criar queries para detectar vulnerabilidades específicas ao negócio. [docs.checkmarx.com]
+✔️ Correlação de resultados entre motores
+No Checkmarx One, achados de SAST, SCA, IaC e API são unificados, melhorando análise e priorização. [checkmarx.com]
+✔️ Análises contínuas (shift-left real)
+Scans podem ser:
+
+manuais
+agendados
+disparados no CI [docs.checkmarx.com]
+
+
+⭐ Por que a Checkmarx é tão usada?
+
+Alta precisão (menos ruído e falsos positivos)
+Suporte amplo a linguagens
+Integração forte com CI/CD e IDEs
+Plataforma unificada AppSec
+Foco recente em IA para velocidade e qualidade
+Reconhecimento como líder global pela Forrester
+ [malware.news], [checkmarx.com]
+
+
+🧠 Resumo simples
+A Checkmarx é hoje uma das soluções mais completas de AppSec, indo muito além de um SAST tradicional: ela cobre todo o ciclo de segurança do software, correlaciona vulnerabilidades entre várias áreas, ajuda desenvolvedores com correções inteligentes no IDE e é reconhecida como líder do mercado.
+
+
+Veracode
+
+https://www.veracode.com/security/static-analysis-tool
