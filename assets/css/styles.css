@@ -1,9 +1,13 @@
 .stat-number {
-  font-size: 1.5rem; /* reduced for desktop */
+    font-size: 2rem; /* Font size for desktop */
+    background: linear-gradient(to right, #ff007e, #590fb0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 5px rgba(255, 0, 126, 0.7), 0 0 10px rgba(89, 15, 176, 0.7);
 }
 
 @media (max-width: 768px) {
-  .stat-number {
-    font-size: 1.25rem; /* reduced for mobile */
-  }
+    .stat-number {
+        font-size: 1.75rem; /* Font size for mobile */
+    }
 }
