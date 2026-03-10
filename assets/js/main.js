@@ -170,44 +170,57 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  const showInfo = (type) => {
+  window.showInfo = (type) => {
     const data = infoData[type];
     if (!data) return;
 
-    infoModalBody.innerHTML = `
-      <h3 class="text-lg font-mono ${data.color} mb-3 font-bold">${data.title}</h3>
-      <p class="text-sm leading-relaxed">${data.desc}</p>
-    `;
+    if (infoModalBody) {
+      infoModalBody.innerHTML = `
+        <h3 class="text-lg font-mono ${data.color} mb-3 font-bold">${data.title}</h3>
+        <p class="text-sm leading-relaxed">${data.desc}</p>
+      `;
+    }
 
-    infoModal.classList.remove('hidden');
-    infoModal.classList.add('flex');
+    if (infoModal) {
+      infoModal.classList.remove('hidden');
+      infoModal.classList.add('flex');
+    }
     
     setTimeout(() => {
-      infoModalContent.classList.remove('scale-95', 'opacity-0');
-      infoModalContent.classList.add('scale-100', 'opacity-100');
+      if (infoModalContent) {
+        infoModalContent.classList.remove('scale-95', 'opacity-0');
+        infoModalContent.classList.add('scale-100', 'opacity-100');
+      }
     }, 10);
   };
 
-  const hideInfo = () => {
-    infoModalContent.classList.remove('scale-100', 'opacity-100');
-    infoModalContent.classList.add('scale-95', 'opacity-0');
+  window.hideInfo = () => {
+    if (infoModalContent) {
+      infoModalContent.classList.remove('scale-100', 'opacity-100');
+      infoModalContent.classList.add('scale-95', 'opacity-0');
+    }
     setTimeout(() => {
-      infoModal.classList.add('hidden');
-      infoModal.classList.remove('flex');
+      if (infoModal) {
+        infoModal.classList.add('hidden');
+        infoModal.classList.remove('flex');
+      }
     }, 200);
   };
 
   infoButtons.forEach(btn => {
-    btn.addEventListener('click', () => showInfo(btn.getAttribute('data-type')));
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.showInfo(btn.getAttribute('data-type'));
+    });
   });
 
   if (closeInfoModal) {
-    closeInfoModal.addEventListener('click', hideInfo);
+    closeInfoModal.addEventListener('click', window.hideInfo);
   }
 
   if (infoModal) {
     infoModal.addEventListener('click', (e) => {
-      if (e.target === infoModal) hideInfo();
+      if (e.target === infoModal) window.hideInfo();
     });
   }
 });
