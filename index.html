@@ -300,8 +300,8 @@ GET {downloadLink}</code></pre>
                 <span class="badge badge-blue mb-4 inline-block">Seção 03</span>
                 <h2 class="text-2xl md:text-4xl font-mono font-bold text-neon glow-blue mb-2">Ferramentas SAST</h2>
                 <div class="flex justify-center gap-6 mb-6">
-                    <button class="info-btn text-[10px] uppercase tracking-widest text-gray-500 hover:text-neon transition-all duration-300 border-b border-dotted border-gray-700 hover:border-neon pb-0.5 font-mono" data-type="sast">O que é SAST?</button>
-                    <button class="info-btn text-[10px] uppercase tracking-widest text-gray-500 hover:text-matrix transition-all duration-300 border-b border-dotted border-gray-700 hover:border-matrix pb-0.5 font-mono" data-type="dast">O que é DAST?</button>
+                    <button class="info-btn text-[10px] uppercase tracking-widest text-gray-500 hover:text-neon transition-all duration-300 border-b border-dotted border-gray-700 hover:border-neon pb-0.5 font-mono" data-type="sast" onclick="window.showInfo('sast')">O que é SAST?</button>
+                    <button class="info-btn text-[10px] uppercase tracking-widest text-gray-500 hover:text-matrix transition-all duration-300 border-b border-dotted border-gray-700 hover:border-matrix pb-0.5 font-mono" data-type="dast" onclick="window.showInfo('dast')">O que é DAST?</button>
                 </div>
                 <p class="text-gray-400 max-w-2xl mx-auto">Comparativo técnico de ferramentas de análise estática para
                     código exportado do OutSystems.</p>
@@ -641,9 +641,9 @@ jobs:
         </svg>
     </button>
     <!-- Tooltip Modal -->
-    <div id="info-modal" class="fixed inset-0 z-[2000] hidden items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-        <div class="bg-dark-card border border-gray-800 rounded-xl max-w-md w-full p-6 relative shadow-2xl transform transition-all scale-95 opacity-0" id="info-modal-content">
-            <button id="close-info-modal" class="absolute top-4 right-4 text-gray-500 hover:text-white transition-colors">
+    <div id="info-modal" class="fixed inset-0 z-[9999] hidden items-center justify-center p-4 bg-black/90 backdrop-blur-sm">
+        <div class="bg-[#121212] border border-gray-800 rounded-xl max-w-md w-full p-6 relative shadow-2xl transform transition-all scale-95 opacity-0" id="info-modal-content">
+            <button id="close-info-modal" class="absolute top-4 right-4 text-gray-500 hover:text-white transition-colors" onclick="window.hideInfo()">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
