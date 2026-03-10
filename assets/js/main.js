@@ -149,4 +149,65 @@ document.addEventListener('DOMContentLoaded', () => {
       heroSection.appendChild(particle);
     }
   }
+
+  // === Info Tooltips (SAST/DAST) ===
+  const infoModal = document.getElementById('info-modal');
+  const infoModalContent = document.getElementById('info-modal-content');
+  const infoModalBody = document.getElementById('info-modal-body');
+  const closeInfoModal = document.getElementById('close-info-modal');
+  const infoButtons = document.querySelectorAll('.info-btn');
+
+  const infoData = {
+    sast: {
+      title: 'SAST — Static Application Security Testing',
+      desc: 'É o teste estático do código — ou seja, analisa o código-fonte, bytecode ou binário sem executar a aplicação.',
+      color: 'text-neon'
+    },
+    dast: {
+      title: 'DAST — Dynamic Application Security Testing',
+      desc: 'É o teste dinâmico, realizado com a aplicação em execução — como se fosse um “hacker externo” tentando explorar falhas.',
+      color: 'text-matrix'
+    }
+  };
+
+  const showInfo = (type) => {
+    const data = infoData[type];
+    if (!data) return;
+
+    infoModalBody.innerHTML = `
+      <h3 class="text-lg font-mono ${data.color} mb-3 font-bold">${data.title}</h3>
+      <p class="text-sm leading-relaxed">${data.desc}</p>
+    `;
+
+    infoModal.classList.remove('hidden');
+    infoModal.classList.add('flex');
+    
+    setTimeout(() => {
+      infoModalContent.classList.remove('scale-95', 'opacity-0');
+      infoModalContent.classList.add('scale-100', 'opacity-100');
+    }, 10);
+  };
+
+  const hideInfo = () => {
+    infoModalContent.classList.remove('scale-100', 'opacity-100');
+    infoModalContent.classList.add('scale-95', 'opacity-0');
+    setTimeout(() => {
+      infoModal.classList.add('hidden');
+      infoModal.classList.remove('flex');
+    }, 200);
+  };
+
+  infoButtons.forEach(btn => {
+    btn.addEventListener('click', () => showInfo(btn.getAttribute('data-type')));
+  });
+
+  if (closeInfoModal) {
+    closeInfoModal.addEventListener('click', hideInfo);
+  }
+
+  if (infoModal) {
+    infoModal.addEventListener('click', (e) => {
+      if (e.target === infoModal) hideInfo();
+    });
+  }
 });
